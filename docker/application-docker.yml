@@ -1,0 +1,8 @@
+app:
+  version: 1.0.0
+  name: ApprovalService
+
+aws:
+  region: us-west-1
+  env: dev
+  tableIdentifier: multilevel

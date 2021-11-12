@@ -1,0 +1,9 @@
+#directories and files
+target
+*.iml
+.idea
+.DS_Store
+.classpath
+.project
+.settings
+classes

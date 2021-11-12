@@ -1,0 +1,34 @@
+# For dandy 2.X, always set this to 2
+version: 2
+name: default_namespace
+
+# An array of "build" descriptors that can be used in the applications below by referencing the build.name in a build_name attribute
+build:
+  - name: spredfast/approval-service
+    dockerfile: Dockerfile
+    docker_dir: .
+
+# An array of "application" descriptors. These are built and deployed in order
+# from top to bottom, depending on the label that is designated.
+# All applications require either an "image" or "build_name" attribute
+apps:
+  # example of the simplest type of service, a single web listener
+  - approval-service-qa:
+      name: approval-service
+      build_name: spredfast/approval-service
+      cpu: 100m # Kubernetes CPU reservation
+      mem: 5G # Kubernetes Memory reservation
+      namespace: qa
+      context: care-test
+      iam_role: k8s-qa-care-manageview-webapp # IAM Role for this deployment to use
+      replicas: 3 # Number of pods running for this deployment, by default 1 is fine
+      services:
+        cluster_ip: # all the cluster ip backed service ports
+          ports: # The ports that expose your service on a ClusterIP service
+            - name: www # You must name your ports something
+              container_port: 8080 # The port your app listens on "inside" the container
+              service_port: 80 # The port that should be exposed to a load balancer. In most cases make this 80 for ingress
+
+            - name: admin # You must name your ports something
+              container_port: 8081 # The port your app listens on "inside" the container
+              service_port: 8081 # The port that should be exposed to a load balancer. In most cases make this 80 for ingress
